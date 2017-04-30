@@ -4,13 +4,34 @@ namespace SocialNetworksAnalysis
 {
     public static class PsychProfile
     {
+        /// <summary>
+        /// Уровень выраженности психологической характеристики
+        /// </summary>
         public enum TraitDegree
         {
+            /// <summary>
+            /// Низкий уровень
+            /// </summary>
             LOW,
+            /// <summary>
+            /// Средний уровень
+            /// </summary>
             MEDIUM,
+            /// <summary>
+            /// Высокий уровень
+            /// </summary>
             HIGH
         }
 
+        /// <summary>
+        /// Возвращает значения выраженности видов психологической защиты пользователя
+        /// </summary>
+        /// <param name="network">сеть, из которой собираются данные для анализа.
+        /// Варианты:
+        /// <see cref="SocialNetwork.VK"/></param>
+        /// <param name="id">идентификатор пользователя в выбранной сети</param>
+        /// <returns>Словарь с парами "название характеристики" - "степень выраженности"</returns>
+        /// <seealso cref="PsychProfile.TraitDegree"/>
         public static Dictionary<string, TraitDegree> GetUserPsychDefense(string network, long id)
         {
             Dictionary <string, TraitDegree> result = new Dictionary<string, TraitDegree>();
