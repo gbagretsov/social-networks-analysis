@@ -27,7 +27,7 @@ namespace SocialNetworksAnalysis
             result.Add("Рационализация",   TraitDegree.LOW);
             result.Add("Гиперкомпенсация", TraitDegree.LOW);
             result.Add("Общий уровень",    TraitDegree.LOW);
-
+            
             return result;
         }
 
