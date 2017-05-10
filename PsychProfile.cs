@@ -32,7 +32,7 @@ namespace SocialNetworksAnalysis
         /// <param name="id">идентификатор пользователя в выбранной сети</param>
         /// <returns>Словарь с парами "название характеристики" - "степень выраженности"</returns>
         /// <seealso cref="PsychProfile.TraitDegree"/>
-        public static Dictionary<string, TraitDegree> GetUserPsychDefense(string network, long id)
+        public static Dictionary<string, TraitDegree> GetUserPsychProfile(string network, long id)
         {
             Dictionary <string, TraitDegree> result = new Dictionary<string, TraitDegree>();
             List<string> data = SocialNetwork.GetPosts(network, id);
