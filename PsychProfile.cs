@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using SocialNetworksAnalysis.ClassifierModel;
+
 namespace SocialNetworksAnalysis
 {
     public static class PsychProfile
@@ -37,17 +39,14 @@ namespace SocialNetworksAnalysis
             Dictionary <string, TraitDegree> result = new Dictionary<string, TraitDegree>();
             List<string> data = SocialNetwork.GetPosts(network, id);
 
-            // TODO: подключение к Azure
+            var svmResult = new SVM().GetPsychProfile(data.ToArray());
 
-            result.Add("Отрицание",        TraitDegree.LOW);
-            result.Add("Вытеснение",       TraitDegree.LOW);
-            result.Add("Регрессия",        TraitDegree.LOW);
-            result.Add("Компенсация",      TraitDegree.LOW);
-            result.Add("Проекция",         TraitDegree.LOW);
-            result.Add("Замещение",        TraitDegree.LOW);
-            result.Add("Рационализация",   TraitDegree.LOW);
-            result.Add("Гиперкомпенсация", TraitDegree.LOW);
-            result.Add("Общий уровень",    TraitDegree.LOW);
+            foreach (var item in svmResult)
+            {
+                result.Add(item.Key, item.Value == 0 ? TraitDegree.LOW :
+                                     item.Value == 1 ? TraitDegree.MEDIUM : 
+                                                       TraitDegree.HIGH);
+            }
             
             return result;
         }
