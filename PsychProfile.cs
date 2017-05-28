@@ -39,6 +39,9 @@ namespace SocialNetworksAnalysis
             Dictionary <string, TraitDegree> result = new Dictionary<string, TraitDegree>();
             List<string> data = SocialNetwork.GetPosts(network, id);
 
+            if (data.Count == 0)
+                return null;
+
             var svmResult = new SVM().GetPsychProfile(data.ToArray());
 
             foreach (var item in svmResult)

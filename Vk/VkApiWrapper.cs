@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using VkNet.Enums.SafetyEnums;
+using VkNet.Exception;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
@@ -18,12 +20,40 @@ namespace SocialNetworksAnalysis.Vk
         {
             List<string> data = new List<string>();
 
-            List<Post> posts = VkApiHolder.Api.Wall.Get(new WallGetParams()
+            List<Post> posts = new List<Post>();
+            
+            try
             {
-                OwnerId = id,
-                Filter = WallFilter.Owner,
-                Count = 100
-            }).WallPosts.ToList();
+                posts = VkApiHolder.Api.Wall.Get(new WallGetParams()
+                {
+                    OwnerId = id,
+                    Filter = WallFilter.Owner,
+                    Count = 100
+                }).WallPosts.ToList();
+            }
+            catch (InvalidParameterException)
+            {
+                // Пропускаем неопознаваемые записи                        
+                for (uint i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(400);
+                    try
+                    {
+                        var curPost = VkApiHolder.Api.Wall.Get(new WallGetParams()
+                        {
+                            OwnerId = id,
+                            Filter = WallFilter.Owner,
+                            Count = 1,
+                            Offset = i
+                        }).WallPosts.ToList();
+                        if (curPost.Count == 1)
+                        {
+                            posts.Add(curPost[0]);
+                        }
+                    }
+                    catch (InvalidParameterException) { }
+                }
+            }    
 
             foreach (Post post in posts)
             {
