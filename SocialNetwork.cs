@@ -4,8 +4,14 @@ using SocialNetworksAnalysis.Vk;
 
 namespace SocialNetworksAnalysis
 {
+    /// <summary>
+    /// API для работы с социальными сетями
+    /// </summary>
     public static class SocialNetwork
     {
+        /// <summary>
+        /// ВКонтакте
+        /// </summary>
         public const string VK = "vk";
 
         /// <summary>

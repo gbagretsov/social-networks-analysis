@@ -4,6 +4,9 @@ using SocialNetworksAnalysis.ClassifierModel;
 
 namespace SocialNetworksAnalysis
 {
+    /// <summary>
+    /// API для построения психологического профиля
+    /// </summary>
     public static class PsychProfile
     {
         /// <summary>
@@ -27,12 +30,13 @@ namespace SocialNetworksAnalysis
 
         /// <summary>
         /// Возвращает значения выраженности видов психологической защиты пользователя
+        /// (или null, если на стене пользователя отсутствует размещённая им текстовая информация)
         /// </summary>
         /// <param name="network">сеть, из которой собираются данные для анализа.
         /// Варианты:
         /// <see cref="SocialNetwork.VK"/></param>
         /// <param name="id">идентификатор пользователя в выбранной сети</param>
-        /// <returns>Словарь с парами "название характеристики" - "степень выраженности"</returns>
+        /// <returns>Словарь с парами "название характеристики" - "степень выраженности" (или null, если на стене пользователя отсутствует размещённая им текстовая информация)</returns>
         /// <seealso cref="PsychProfile.TraitDegree"/>
         public static Dictionary<string, TraitDegree> GetUserPsychProfile(string network, long id)
         {
