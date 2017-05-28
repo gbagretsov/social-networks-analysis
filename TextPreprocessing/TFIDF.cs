@@ -38,34 +38,31 @@ namespace SocialNetworksAnalysis.TextPreprocessing
         /// Document vocabulary, containing each word's IDF value.
         /// </summary>
         private static Dictionary<string, double> _vocabularyIDF = new Dictionary<string, double>();
+        private static Dictionary<string, double> _filteredVocabularyIDF = new Dictionary<string, double>();
 
         /// <summary>
         /// Transforms a list of documents into their associated TF*IDF values.
         /// If a vocabulary does not yet exist, one will be created, based upon the documents' words.
         /// </summary>
         /// <param name="documents">string[]</param>
-        /// <param name="vocabularyThreshold">Minimum number of occurences of the term within all documents</param>
         /// <returns>double[][]</returns>
-        internal static double[][] Transform(string[] documents, int vocabularyThreshold = 3)
+        public static double[][] Transform(string[] documents)
         {
             List<List<string>> stemmedDocs;
             List<string> vocabulary;
 
+            int vocabularyThreshold = 2;
+            int featuresAmount = 9000;
+
             // Get the vocabulary and stem the documents at the same time.
             vocabulary = GetVocabulary(documents, out stemmedDocs, vocabularyThreshold);
 
-            if (_vocabularyIDF.Count == 0)
-            {
-                // Calculate the IDF for each vocabulary term.
-                foreach (var term in vocabulary)
-                {
-                    double numberOfDocsContainingTerm = stemmedDocs.Where(d => d.Contains(term)).Count();
-                    _vocabularyIDF[term] = Math.Log((double)stemmedDocs.Count / ((double)1 + numberOfDocsContainingTerm));
-                }
-            }
+            TryLoadVocabulary();
+
+            _filteredVocabularyIDF = _vocabularyIDF.OrderByDescending(t => t.Value).Take(featuresAmount).ToDictionary(x => x.Key, x => x.Value);
 
             // Transform each document into a vector of tfidf values.
-            return TransformToTFIDFVectors(stemmedDocs, _vocabularyIDF);
+            return TransformToTFIDFVectors(stemmedDocs, _filteredVocabularyIDF);
         }
 
         /// <summary>
